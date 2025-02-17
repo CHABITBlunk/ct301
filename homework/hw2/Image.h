@@ -5,14 +5,17 @@ using namespace std;
 
 class Image {
 public:
-  Image(string fname);
+  Image(string ppmfname, string checksumfname);
   int readSingleValue();
   bool hasValidHeader();
-  int createMatrix();
+  bool isValidEntry(int i);
+  int readFile();
+  int compareAgainstChecksum();
 
 protected:
-  string filename;
-  ifstream infile;
-  unsigned width, height, maxValue;
-  int **imageMatrix;
+  string ppmfilename, checksumfilename;
+  ifstream ppm, checksum;
+  int width, height, maxValue;
+  int **image;
+  int *rowTotals;
 };
