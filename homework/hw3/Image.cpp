@@ -1,4 +1,5 @@
 #include "Image.h"
+#include "Pixel.h"
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -30,6 +31,8 @@ int Image::readSingleValue() {
   return -1;
 }
 
+Pixel Image::readPixelValue() {}
+
 bool Image::hasValidHeader() {
   string firstLine;
   ppm >> firstLine;
@@ -38,13 +41,13 @@ bool Image::hasValidHeader() {
     ppm.ignore();
     return false;
   }
-  string str("P3");
+  string str("P6");
   return firstLine == str;
 }
 
 bool Image::isValidEntry(int i) { return i <= maxValue && i >= 0; }
 
-int Image::readFile() {
+int Image::readImageFile() {
   if (!this->hasValidHeader()) {
     cerr << "error: ppm file has incorrect header" << endl;
     return -1;
@@ -86,7 +89,7 @@ int Image::readFile() {
 }
 
 int Image::compareAgainstChecksum() {
-  if (readFile() != 0) {
+  if (readImageFile() != 0) {
     return -1;
   }
   if (!checksum.is_open()) {
