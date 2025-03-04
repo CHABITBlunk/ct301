@@ -1,3 +1,4 @@
+#include "Pixel.h"
 #include <fstream>
 #include <iostream>
 

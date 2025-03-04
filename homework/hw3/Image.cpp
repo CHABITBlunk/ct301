@@ -1,5 +1,4 @@
 #include "Image.h"
-#include "Pixel.h"
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -31,7 +30,7 @@ int Image::readSingleValue() {
   return -1;
 }
 
-Pixel Image::readPixelValue() {}
+Pixel Image::readPixelValue() { return Pixel(0, 0, 0); }
 
 bool Image::hasValidHeader() {
   string firstLine;
@@ -41,8 +40,7 @@ bool Image::hasValidHeader() {
     ppm.ignore();
     return false;
   }
-  string str("P6");
-  return firstLine == str;
+  return firstLine == "P6";
 }
 
 bool Image::isValidEntry(int i) { return i <= maxValue && i >= 0; }
@@ -55,10 +53,10 @@ int Image::readImageFile() {
   height = this->readSingleValue();
   width = this->readSingleValue();
   maxValue = this->readSingleValue();
-  this->image = new int *[height];
+  this->image = new Pixel *[height];
   this->rowTotals = new int[height];
   for (int i = 0; i < height; i++) {
-    image[i] = new int[width];
+    image[i] = new Pixel[width];
   }
   int nextR, nextG, nextB;
   int r = 0, c = 0;
@@ -68,7 +66,7 @@ int Image::readImageFile() {
       cerr << "error: entry out of bounds" << endl;
       return -1;
     }
-    image[r][c] = nextR + nextG + nextB;
+    image[r][c] = Pixel(nextR, nextG, nextB);
     c++;
     if (c == width) {
       c = 0;
@@ -82,7 +80,7 @@ int Image::readImageFile() {
   for (r = 0; r < height; r++) {
     rowTotals[r] = 0;
     for (c = 0; c < width; c++) {
-      rowTotals[r] += image[r][c];
+      rowTotals[r] += image[r][c].getSum();
     }
   }
   return 0;
