@@ -10,7 +10,6 @@ Image::Image(string ppmfname, string checksumfname) {
   ppmfilename = ppmfname;
   checksumfilename = checksumfname;
   ppm.open(ppmfilename);
-  checksum.open(checksumfilename);
   if (!ppm.is_open()) {
     cerr << "error: unable to open file " << ppmfilename << endl;
   }
@@ -89,8 +88,10 @@ int Image::compareAgainstChecksum() {
   if (readFile() != 0) {
     return -1;
   }
+  checksum.open(checksumfilename);
   if (!checksum.is_open()) {
     cerr << "Unable to open file " << checksumfilename << endl;
+    return -1;
   }
   for (int i = 0; i < height; i++) {
     int rowTotal;

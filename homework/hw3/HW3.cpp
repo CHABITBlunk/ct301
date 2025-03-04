@@ -11,6 +11,6 @@ int main(int argc, char *argv[]) {
          << endl;
     return -1;
   }
-  Image image(argv[1], argv[2]);
-  return image.compareAgainstChecksum();
+  Image image(argv[1]);
+  return image.writeToChecksumFiles(argv[2], argv[3]);
 }
