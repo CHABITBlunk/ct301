@@ -44,7 +44,7 @@ bool Image::hasValidHeader() {
     ppm.ignore();
     return false;
   }
-  return firstLine == "P6";
+  return firstLine == "P6" || firstLine == "P3";
 }
 
 bool Image::isValidEntry(int i) { return i <= maxValue && i >= 0; }
