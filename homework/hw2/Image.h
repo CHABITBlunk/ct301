@@ -8,14 +8,14 @@ public:
   Image(string ppmfname, string checksumfname);
   int readSingleValue();
   bool hasValidHeader();
-  bool isValidEntry(int i);
+  bool isValidEntry(size_t i);
   int readFile();
   int compareAgainstChecksum();
 
 protected:
   string ppmfilename, checksumfilename;
   ifstream ppm, checksum;
-  int width, height, maxValue;
+  size_t width, height, maxValue;
   int **image;
   int *rowTotals;
 };

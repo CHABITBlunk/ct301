@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -41,23 +42,23 @@ bool Image::hasValidHeader() {
   return firstLine == str;
 }
 
-bool Image::isValidEntry(int i) { return i <= maxValue && i >= 0; }
+bool Image::isValidEntry(size_t i) { return i <= maxValue; }
 
 int Image::readFile() {
   if (!this->hasValidHeader()) {
     cerr << "error: ppm file has incorrect header" << endl;
     return -1;
   }
-  height = this->readSingleValue();
   width = this->readSingleValue();
+  height = this->readSingleValue();
   maxValue = this->readSingleValue();
   this->image = new int *[height];
   this->rowTotals = new int[height];
-  for (int i = 0; i < height; i++) {
+  for (size_t i = 0; i < height; i++) {
     image[i] = new int[width];
   }
   int nextR, nextG, nextB;
-  int r = 0, c = 0;
+  size_t r = 0, c = 0;
   while (ppm >> nextR >> nextG >> nextB) {
     if (!this->isValidEntry(nextR) || !this->isValidEntry(nextG) ||
         !this->isValidEntry(nextB)) {
@@ -93,11 +94,26 @@ int Image::compareAgainstChecksum() {
     cerr << "Unable to open file " << checksumfilename << endl;
     return -1;
   }
-  for (int i = 0; i < height; i++) {
-    int rowTotal;
-    checksum >> rowTotal;
-    if (rowTotals[i] != rowTotal) {
-      cerr << "error: checksum in row " << i + 1 << " (" << rowTotal << ") "
+  vector<int> checksums;
+  int rowTotal;
+  while (checksum >> rowTotal) {
+    if (checksum.fail()) {
+      checksum.clear();
+      checksum.ignore();
+      cerr << "error: checksum file is corrupted" << endl;
+      return -1;
+    }
+    checksums.push_back(rowTotal);
+  }
+  if (checksums.size() != height) {
+    cerr << "error: checksum length " << checksums.size()
+         << " does not match expected number of checksums (" << height << ")"
+         << endl;
+    return -1;
+  }
+  for (size_t i = 0; i < height; i++) {
+    if (rowTotals[i] != checksums[i]) {
+      cerr << "error: checksum in row " << i + 1 << " (" << checksums[i] << ") "
            << "does not match calculated total (" << rowTotals[i] << ")"
            << endl;
       return -(i + 2);
