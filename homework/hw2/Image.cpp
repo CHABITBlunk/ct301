@@ -107,7 +107,7 @@ int Image::compareAgainstChecksum() {
   }
   if (checksums.size() != height) {
     cerr << "error: checksum length " << checksums.size()
-         << " does not match expected number of checksums (" << height << ")"
+         << "does not match expected number of checksums (" << height << ")"
          << endl;
     return -1;
   }
