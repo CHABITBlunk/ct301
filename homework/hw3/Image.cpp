@@ -54,8 +54,8 @@ int Image::readImageFile() {
     cerr << "error: ppm file has incorrect header" << endl;
     return -1;
   }
-  height = this->readSingleValue();
   width = this->readSingleValue();
+  height = this->readSingleValue();
   maxValue = this->readSingleValue();
   this->image = new Pixel *[height];
   this->rowTotals = new int[height];
