@@ -1,6 +1,8 @@
 #include "Image.h"
+#include <cmath>
 #include <cstdio>
 #include <iostream>
+#include <limits.h>
 
 using namespace std;
 
@@ -16,16 +18,13 @@ int Image::readImageFile() {
   for (int i = 0; i < height; i++) {
     image[i] = new Pixel[width];
   }
-  Pixel nextPixel;
   int r = 0, c = 0;
-  while (!file.eof()) {
-    (nextPixel = file.readPixel());
-    for (int i = 0; i < 3; i++) {
-      if (!isValidEntry(nextPixel.getR()) || !isValidEntry(nextPixel.getG()) ||
-          !isValidEntry(nextPixel.getB())) {
-        cerr << "error: entry out of bounds" << endl;
-        return -1;
-      }
+  while (r < height) {
+    Pixel nextPixel = file.readPixel();
+    if (!isValidEntry(nextPixel.r) || !isValidEntry(nextPixel.g) ||
+        !isValidEntry(nextPixel.b)) {
+      cerr << "error: entry out of bounds" << endl;
+      return -1;
     }
     image[r][c] = nextPixel;
     c++;
@@ -34,24 +33,50 @@ int Image::readImageFile() {
       r++;
     }
   }
-  if (r != height) {
-    cerr << "error: rows not right size" << endl;
-    return -1;
-  }
-  if (c != width) {
-    cerr << "error: columns not right size" << endl;
-    return -1;
-  }
   return 0;
+}
+
+int min(Pixel p, int l) {
+  if (p.r < l) {
+    l = p.r;
+  }
+  if (p.g < l) {
+    l = p.g;
+  }
+  if (p.b < l) {
+    l = p.b;
+  }
+  return l;
+}
+
+int max(Pixel p, int h) {
+  if (p.r > h) {
+    h = p.r;
+  }
+  if (p.g > h) {
+    h = p.g;
+  }
+  if (p.b > h) {
+    h = p.b;
+  }
+  return h;
 }
 
 void Image::normalize() {
   cout << "image before normalization" << endl;
-  for (int i = 0; i < width; i++) {
-    for (int j = 0; j < height; j++) {
-      cout << "(" << image[i][j].getR() << "," << image[i][j].getG() << ","
-           << image[i][j].getB() << ") ";
+  int h = INT_MIN, l = INT_MAX;
+  int r, c;
+  for (r = 0; r < height; r++) {
+    for (c = 0; c < width; c++) {
+      h = max(image[r][c], h);
+      l = min(image[r][c], l);
     }
-    cout << endl;
+  }
+  for (r = 0; r < height; r++) {
+    for (c = 0; c < width; c++) {
+      image[r][c].r = std::round((image[r][c].r - l) * (255 / (h - l)));
+      image[r][c].g = std::round((image[r][c].g - l) * (255 / (h - l)));
+      image[r][c].b = std::round((image[r][c].b - l) * (255 / (h - l)));
+    }
   }
 }
