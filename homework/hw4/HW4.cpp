@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
   if (argc != 3) {
-    cerr << "error: should have two arguments (e.g. './HW2 test.ppm output')"
+    cerr << "error: should have two arguments (e.g. './HW4 test.ppm output')"
          << endl;
     return -1;
   }
@@ -16,5 +16,5 @@ int main(int argc, char *argv[]) {
     return readResult;
   }
   image.normalize();
-  return 0;
+  return image.writeToFile(argv[2]);
 }

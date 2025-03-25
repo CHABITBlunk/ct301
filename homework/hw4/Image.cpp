@@ -1,6 +1,7 @@
 #include "Image.h"
 #include <cmath>
 #include <cstdio>
+#include <fstream>
 #include <iostream>
 #include <limits.h>
 
@@ -63,7 +64,6 @@ int max(Pixel p, int h) {
 }
 
 void Image::normalize() {
-  cout << "image before normalization" << endl;
   int h = INT_MIN, l = INT_MAX;
   int r, c;
   for (r = 0; r < height; r++) {
@@ -79,4 +79,20 @@ void Image::normalize() {
       image[r][c].b = std::round((image[r][c].b - l) * (255 / (h - l)));
     }
   }
+  maxValue = 255;
+}
+
+int Image::writeToFile(string fname) {
+  ofstream out(fname);
+  out << "P3" << endl;
+  out << width << " " << height << " " << maxValue << endl;
+  int r, c;
+  for (r = 0; r < height; r++) {
+    for (c = 0; c < width; c++) {
+      out << image[r][c].r << " " << image[r][c].g << " " << image[r][c].b
+          << endl;
+    }
+  }
+  out.close();
+  return 0;
 }

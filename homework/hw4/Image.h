@@ -12,6 +12,7 @@ public:
 
   int readImageFile();
   void normalize();
+  int writeToFile(string fname);
 
 protected:
   PPMFile file;
