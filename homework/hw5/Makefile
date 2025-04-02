@@ -1,0 +1,23 @@
+# Optional Flags
+opts=-D_FORTIFY_SOURCE=2 -fno-diagnostics-show-option	\
+-fstack-protector-all -g -Walloc-zero -Walloca	\
+-Wctor-dtor-privacy -Wduplicated-cond -Wduplicated-branches		\
+-Wextra -Winit-self -Wlogical-op -Wno-unused-variable -Wno-unused-parameter  \
+-Wold-style-cast -Wpedantic -Wshadow -Wunused-const-variable=2	\
+-Wzero-as-null-pointer-constant -O2
+CXXFLAGS=-Wall -Werror -Wfatal-errors $(opts)
+
+assignment=HW5
+
+headers=Image.h Pixel.h PPMFile.h 
+
+cpps=Image.cpp PPMFile.cpp 
+
+$(assignment): 
+		g++ $(CXXFLAGS) -o $(assignment) $(assignment).cpp $(cpps) $(headers)
+
+tar:
+		tar -cf $(assignment).tar *.h *.cpp Makefile
+
+clean:
+		rm -f $(assignment) $(assignment).tar *.o *.gch *.gcov a.out
