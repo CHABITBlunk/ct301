@@ -4,16 +4,21 @@
 
 using namespace std;
 
-class PPMFile {
+class ImageFile {
 public:
-  inline PPMFile(string fname) { ppm = ifstream(fname); }
+  inline ImageFile(string fname) {
+    ppm = ifstream(fname);
+    header = getHeader();
+  }
   inline bool isOpen() const { return ppm.is_open(); }
   inline bool eof() const { return ppm.eof(); }
+  inline bool hasValidHeader() { return header != 0; }
 
-  bool hasValidHeader();
   int readSingleValue();
-  Pixel readPixel();
+  Pixel *readPixel();
 
 private:
   ifstream ppm;
+  int header = 0;
+  int getHeader();
 };
