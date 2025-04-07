@@ -9,8 +9,11 @@ CXXFLAGS=-Wall -Werror -Wfatal-errors $(opts)
 
 assignment=HW5
 
+headers=Image.h utils.h
+cpps=Image.cpp utils.cpp
+
 $(assignment): 
-		g++ $(CXXFLAGS) -o $(assignment) $(assignment).cpp *.h *.cpp
+		g++ $(CXXFLAGS) -o $(assignment) $(assignment).cpp $(headers) $(cpps)
 
 tar:
 		tar -cf $(assignment).tar *.h *.cpp Makefile
