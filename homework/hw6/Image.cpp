@@ -1,61 +1,28 @@
 #include "Image.h"
 #include <cmath>
-#include <fstream>
-#include <iostream>
 #include <limits.h>
 
 using namespace std;
 
-void PPMImage::normalize() {
-  int h = INT_MIN, l = INT_MAX;
-  for (int val : data) {
-    if (val < l)
-      l = val;
-    if (val > h)
-      h = val;
+float Image::mean() {
+  float output = 0.0f;
+  size_t i = 0;
+  for (; i < this->data.size(); i++) {
+    output += this->data[i];
   }
-  for (size_t i = 0; i < data.size(); i++) {
-    data[i] = std::round((data[i] - l) * (255 / (h - l)));
-  }
-  maxValue = 255;
+  output /= (i * 1.0);
+  return output;
 }
 
-void PGMImage::normalize() {
-  int max = INT_MIN, min = INT_MAX;
-  for (int val : data) {
+void Image::normalize() {
+  float max = INT_MIN, min = INT_MAX;
+  for (float val : data) {
     if (val < min)
       min = val;
     if (val > max)
       max = val;
   }
   for (size_t i = 0; i < data.size(); i++)
-    data[i] = std::round((data[i] - min) * (255 / (max - min)));
-  maxValue = 255;
-}
-
-void PPMImage::write(string fname) {
-  ofstream out(fname);
-  out << "P3" << endl;
-  out << width << " " << height << " " << maxValue << endl;
-  for (size_t i = 0; i < data.size(); i++) {
-    out << data[i] << (i % 3 == 2 ? "\n" : " ");
-  }
-}
-
-void PGMImage::write(string fname) {
-  ofstream out(fname);
-  out << "P2" << endl;
-  out << width << " " << height << " " << maxValue << endl;
-  for (size_t i = 0; i < data.size(); i++) {
-    out << data[i] << ((i + 1) % width == 0 ? "\n" : " ");
-  }
-}
-
-void PBMImage::write(string fname) {
-  ofstream out(fname);
-  out << "P1" << endl;
-  out << width << " " << height << " " << 1 << endl;
-  for (size_t i = 0; i < data.size(); i++) {
-    out << data[i] << ((i + 1) % width == 0 ? "\n" : " ");
-  }
+    data[i] = (data[i] - min) * (255.0f / (max - min));
+  maxValue = 255.0f;
 }

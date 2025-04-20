@@ -4,9 +4,8 @@
 
 using namespace std;
 
-inline bool hasExtension(string fname, string ext) {
-  return fname.size() >= ext.size() &&
-         fname.substr(fname.size() - ext.size()) == ext;
-}
 Image *readImage(string fname);
-Image *convertImage(Image *src, string ext);
+inline bool sameSize(Image *a, Image *b) {
+  return a->width == b->width && a->height == b->height;
+}
+float correlation(Image *image, Image *jmage);
