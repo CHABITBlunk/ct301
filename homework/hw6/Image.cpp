@@ -1,6 +1,5 @@
 #include "Image.h"
-#include <cmath>
-#include <limits.h>
+#include <cfloat>
 
 using namespace std;
 
@@ -15,7 +14,7 @@ float Image::mean() {
 }
 
 void Image::normalize() {
-  float max = INT_MIN, min = INT_MAX;
+  float max = FLT_MIN, min = FLT_MAX;
   for (float val : data) {
     if (val < min)
       min = val;

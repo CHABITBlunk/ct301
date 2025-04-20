@@ -22,12 +22,12 @@ int main(int argc, char *argv[]) {
   a->normalize();
   b->normalize();
   if (!sameSize(a, b)) {
+    cerr << "pgm files not same size" << endl;
     delete a;
     delete b;
-    cerr << "pgm files not same size" << endl;
     return -1;
   }
-  printf("%f\n", correlation(a, b));
+  cout << correlation(a, b) << endl;
   delete a;
   delete b;
   return 0;

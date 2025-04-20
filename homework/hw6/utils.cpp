@@ -38,13 +38,15 @@ Image *readImage(string fname) {
 float correlation(Image *a, Image *b) {
   float aMean = a->mean();
   float bMean = b->mean();
-  float num = 0.0f, denom = 0.0f;
+  float num = 0.0f, denomA = 0.0f, denomB = 0.0f;
   for (int i = 0; i < a->width * a->height; i++) {
-    int da = a->data[i] - aMean;
-    int db = b->data[i] - bMean;
+    float da = a->data[i] - aMean;
+    float db = b->data[i] - bMean;
     num += da * db;
-    denom += (sqrt(da * da) * sqrt(db * db));
+    denomA += da * da;
+    denomB += db * db;
   }
+  float denom = sqrt(denomA * denomB);
   float output = num / denom;
   return output;
 }
