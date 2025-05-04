@@ -8,4 +8,4 @@ Image *readImage(string fname);
 inline bool sameSize(const Image *a, const Image *b) {
   return a->width == b->width && a->height == b->height;
 }
-float correlation(const Image *a, const Image *b);
+float correlation(Image *a, Image *b);
