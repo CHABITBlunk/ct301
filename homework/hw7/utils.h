@@ -5,7 +5,7 @@
 using namespace std;
 
 Image *readImage(string fname);
-inline bool sameSize(Image *a, Image *b) {
+inline bool sameSize(const Image *a, const Image *b) {
   return a->width == b->width && a->height == b->height;
 }
-float correlation(Image *image, Image *jmage);
+float correlation(const Image *a, const Image *b);

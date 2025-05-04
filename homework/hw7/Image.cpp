@@ -1,27 +1,30 @@
 #include "Image.h"
-#include <cfloat>
 
 using namespace std;
 
 float Image::mean() {
   float output = 0.0f;
-  size_t i = 0;
-  for (; i < this->data.size(); i++) {
+  int i = 0;
+  int n = width * height;
+  for (; i < n; i++) {
     output += this->data[i];
   }
-  output /= (i * 1.0);
+  output /= static_cast<float>(i);
   return output;
 }
 
 void Image::normalize() {
-  float max = FLT_MIN, min = FLT_MAX;
+  float max = data[0], min = data[0];
   for (float val : data) {
     if (val < min)
       min = val;
     if (val > max)
       max = val;
   }
-  for (size_t i = 0; i < data.size(); i++)
-    data[i] = (data[i] - min) * (255.0f / (max - min));
+  float range = max - min;
+  if (range == 0.0f)
+    return;
+  for (float &val : data)
+    val = (val - min) * (255.0f / range);
   maxValue = 255.0f;
 }
